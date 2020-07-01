@@ -1,0 +1,53 @@
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    var socket = io.connect('http://localhost:8000', {
+        secure: true
+    });
+    var localData = null
+    socket.emit('requestChat', {
+        username: '` +user.username +`',
+        otherUser: '` +targetUser.username +`',
+        accountType: parseInt('` +user.accountType +`')
+    });
+    //New messages were detetected. the variable 'data' is comprised of the differnece between the cloud and local version.
+    socket.on('newMessage', function(data) {
+        console.log("New Message")
+        console.log(data.newChats)
+        //for every new message we must create a new div in the right area, and based on whether it is was from or to the user we decided which copy to use
+        //we will complete this by creating a new div (after the last message on the local file). And then filling that div with the appropriate message element and its attributes
+        //for each time, add a child to the following div: <div id = "messageContainer" class="container-xxl py-6 py-lg-10">
+        //then fill in the child
+        var parentNode = document.getElementById("messageContainer")
+        for (i = 0; i < data.newChats.length; i++) {
+            var newDiv = document.createElement("div");
+            newDiv.classList.add("message");
+            console.log("Adding new chat")
+            //If it was sent from a different user than who is logged on
+            if (data.newChats[i].sentFrom != '` +user.userId +`') {
+                newDiv.innerHTML = '<a class="avatar avatar-sm mr-4 mr-lg-5" href="#" data-chat-sidebar-toggle="#chat-1-user-profile"><img class="avatar-img" src="messenger/assets/images/avatars/7.jpg" alt=""></a><div class="message-body"><div class="message-row"><div class="d-flex align-items-center"><div class="message-content bg-light">                                        <!--<h6 class="mb-2">William Wright</h6>-->                                        <div>'.concat(data.newChats[i].content, '</div>                                        <div class="mt-1">                                                                       </div>                                    </div>                                    <!-- Message: content -->                                    <!-- Message: dropdown -->                                    </div></div></div>');
+            } else {
+                newDiv.classList.add("message-right");
+                newDiv.innerHTML = '<div class="avatar avatar-sm ml-4 ml-lg-5 d-none d-lg-block">                            <img class="avatar-img" src="messenger/assets/images/avatars/12.jpg" alt="">                        </div>                        <!-- Message: body -->                        <div class="message-body">                            <!-- Message: row -->                            <div class="message-row">                                <div class="d-flex align-items-center justify-content-end">                                    <!-- Message: dropdown -->                                    <div class="dropdown">                                        <a class="text-muted opacity-60 mr-3" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">                                            <i class="fe-more-vertical"></i>                                        </a>                                        <div class="dropdown-menu">                                            <a class="dropdown-item d-flex align-items-center" href="#">                                                Edit <span class="ml-auto fe-edit-3"></span>                                            </a>                                            <a class="dropdown-item d-flex align-items-center" href="#">                                                Share <span class="ml-auto fe-share-2"></span>                                            </a>                                            <a class="dropdown-item d-flex align-items-center" href="#">                                                Delete <span class="ml-auto fe-trash-2"></span>                                            </a>                                        </div>                                    </div>                                    <!-- Message: dropdown -->                                    <!-- Message: content -->                                    <div class="message-content bg-primary text-white">                                        <div>'.concat(data.newChats[i].content, '</div>                                        <div class="mt-1">                                            <small class="opacity-65">8 mins ago</small>                                        </div>                                    </div>                                    <!-- Message: content -->                                </div>                            </div>                            <!-- Message: row -->                        </div>                        <!-- Message: body -->                    ');
+            }
+            if (i == data.newChats.length - 1) {
+                newDiv.id = "lastMessage"
+            }
+            location.href = "#lastMessage";
+            parentNode.appendChild(newDiv)
+            newDiv.scrollIntoView();
+        }
+    });
+    function send() {
+        console.log("send data")
+        console.log(document.getElementById("chat-id-1-input").value)
+        socket.emit('send', {
+            
+            userId: '` +user.userId +`',
+            username: '` +user.username +`',
+            otherUser: '` +targetUser.username +`',
+            accountType: parseInt('` +user.accountType +`'),
+            content: document.getElementById("chat-id-1-input").value
+        });
+        document.getElementById("chat-id-1-input").value = "";
+    }
+</script>
