@@ -263,7 +263,7 @@
 
 
                                     <!-- Chats -->
-                                    <nav class="nav d-block list-discussions-js mb-n6">
+                                    <nav class="nav d-block list-discussions-js mb-n6" id='chatList'>
                                         <!-- Chat link -->
                                         <a class="text-reset nav-link p-0 mb-6" onclick="requestChat()">
                                             <div class="card card-active-listener">
@@ -294,6 +294,8 @@
                                                 
                                             </div>
                                         </a>
+
+                                        
                                         <!-- Chat link -->
 
                                       
@@ -937,6 +939,7 @@
         <script>
 var thisUser = ''
 var targetChatUser = ''
+var targetChatUserList = ''
 var currentChatId = ''
 var socket = io.connect('http://localhost:8080', { transport : ['websocket']
     });
@@ -1057,6 +1060,24 @@ function addChat(user, targetUser, chat){
 
 
 
+function renderChats(){
+    //Do this onload
+    console.log("getting chat list")
+    chatList = ''
+    console.log(thisUser)
+    for(i in thisUser.chats){
+        getTargetUser(thisUser.chats[i].with)
+
+
+        console.log(targetChatUser)
+
+        chatList = chatList + `<a class="text-reset nav-link p-0 mb-6" onclick="requestChat('`+targetChatUser.email+`')">    <div class="card card-active-listener">        <div class="card-body">            <div class="media">                                                <div class="avatar mr-5">                    <img class="avatar-img" src="`+ targetChatUser.profileImage +`" alt="Bootstrap Themes">                </div>                                <div class="media-body overflow-hidden">                    <div class="d-flex align-items-center mb-1">                        <h6 class="text-truncate mb-0 mr-auto">`+ targetChatUser.fullName +`</h6>                        <p class="small text-muted text-nowrap ml-4">10:42 am</p>                    </div>                    <div class="text-truncate">Hey, Maher! How are you? The weather is great isn't it?</div>                </div>            </div>        </div>                <div class="badge badge-circle badge-primary badge-border-light badge-top-right">            <span>3</span>        </div>            </div></a>`
+
+    }
+    document.getElementById('chatList').innerHTML = chatList
+
+}
+
 
 function getUserInfo(influencerEmail) {
     fetch('http://192.168.0.128:8000/getInfluencerProfile', {
@@ -1078,6 +1099,33 @@ function getUserInfo(influencerEmail) {
 
 
 }
+
+
+function getTargetUser(targetUsername){
+    console.log("getting target user" + targetUsername)
+    fetch('http://192.168.0.128:8000/getInfluencerProfile', {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: 'leonardmelnik@gmail.com',
+                password: 'l',
+                accountType: 1,
+                targetUsername: targetUsername
+            
+            })
+        })
+        .then(response => response.json())
+        .then(data => setTargetUser(data.influencerProfile));
+
+}
+
+function setTargetUser(targetUser){
+    
+    targetChatUser = targetUser
+    
+}
 getUserInfo()
 
 function addProfileMain(influencerEmail) {
@@ -1098,7 +1146,8 @@ function addProfileMain(influencerEmail) {
 }
 
     
-    function requestChat() {
+    function requestChat(targetEmail) {
+        console.log("getting chat for" + targetEmail)
         fetch('http://192.168.0.128:8000/getChat', {
                 method: 'post',
                 headers: {
@@ -1107,7 +1156,7 @@ function addProfileMain(influencerEmail) {
                 body: JSON.stringify({
                     email: 'leonardmelnik@gmail.com',
                     password: 'l',
-                    targetEmail: 'lol@gmail.com'
+                    targetEmail: targetEmail
                 })
             })
             .then(response => response.json())
@@ -1141,6 +1190,8 @@ function addProfileMain(influencerEmail) {
     function renderSelf(influencerData) {
 
         thisUser = influencerData
+        renderChats()
+
     
         fullName =  influencerData.fullName
         bio = influencerData.bio
@@ -1162,7 +1213,7 @@ function addProfileMain(influencerEmail) {
         parentNode.innerHTML = firstPart + middlePart + lastPart;
     }
     requestSelf()
-
+    
     function renderInfluencerProfile(influencerData) {
         console.log(influencerData)
 
