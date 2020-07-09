@@ -937,7 +937,13 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
         <!-- Scripts -->
         <script>
-var thisUser = ''
+
+
+
+console.log("got info from login")
+console.log(sessionStorage.getItem("user"));
+var targetUser = ""
+var thisUser = JSON.parse(sessionStorage.getItem("user"));
 var targetChatUser = ''
 var targetChatUserList = ''
 var currentChatId = ''
@@ -955,24 +961,6 @@ function addMain(htmlArgument) {
     console.log("done")
 
 }
-function getChat(userId){
-
-    fetch('http://192.168.0.128:8000/getChat', {
-            method: 'post',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                userId: 'leonardmelnik@gmail.com',
-                password: 'l',
-                accountType: 1,
-                targetId: 'leonardmelnik@gmail.com'
-            })
-        })
-        .then(response => response.json())
-        .then(data => renderSettings(data.influencerProfile));
-
-} 
 
 
 function send() {
@@ -990,7 +978,7 @@ function send() {
     }
 
 
-function addChat(user, targetUser, chat){
+    function addChat(user, targetUser, chat){
 
 
     var firstPart = `<div id="chat-2" class="chat dropzone-form-js" data-dz-url="some.php">        <!-- Chat: body -->        <div class="chat-body">            <!-- Chat: Header -->            <div class="chat-header border-bottom py-4 py-lg-6 px-lg-8">                <div class="container-xxl">                    <div class="row align-items-center">                        <!-- Close chat(mobile) -->                        <div class="col-3 d-xl-none">                            <ul class="list-inline mb-0">                                <li class="list-inline-item">                                    <a class="text-muted px-0" onclick="goBack()" data-chat="open">                                        <i class="icon-md fe-chevron-left"></i>                                    </a>                                </li>                            </ul>                        </div>                        <!-- Chat photo -->                        <div class="col-6 col-xl-6">                            <div class="media text-center text-xl-left">                                <div class="avatar avatar-sm avatar-online d-none d-lg-inline-block mr-5">                                    <img src="assets/images/avatars/10.jpg" class="avatar-img" alt="">                                </div>                                <div class="media-body align-self-center text-truncate">                                    <h6 class="text-truncate mb-n1">Anna Bridges</h6>                                    <span class="badge badge-dot badge-success d-inline-block d-xl-none mr-1"></span>                                    <small class="text-muted">Online</small>                                </div>                            </div>                        </div>                        <!-- Chat toolbar -->                        <div class="col-3 col-xl-6 text-right">                            <ul class="nav justify-content-end">                                <li class="nav-item list-inline-item d-none d-xl-block mr-3">                                    <a class="nav-link text-muted px-3" data-toggle="collapse" data-target="#chat-2-search" href="#" title="Search this chat">                                        <i class="icon-md fe-search"></i>                                    </a>                                </li>                                <li class="nav-item list-inline-item d-none d-xl-block mr-0">                                    <a class="nav-link text-muted px-3" href="#" data-chat-sidebar-toggle="#chat-2-info" title="Details">                                        <i class="icon-md fe-more-vertical"></i>                                    </a>                                </li>                                <!-- Mobile nav -->                                <li class="nav-item list-inline-item d-block d-xl-none">                                    <div class="dropdown">                                        <a class="nav-link text-muted px-0" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">                                            <i class="icon-md fe-more-vertical"></i>                                        </a>                                        <div class="dropdown-menu">                                            <a class="dropdown-item d-flex align-items-center" data-toggle="collapse" data-target="#chat-2-search" href="#">                                                Search <span class="ml-auto pl-5 fe-search"></span>                                            </a>                                            <a class="dropdown-item d-flex align-items-center" href="#" data-chat-sidebar-toggle="#chat-2-info">                                                Chat Info <span class="ml-auto pl-5 fe-more-horizontal"></span>                                            </a>                                        </div>                                    </div>                                </li>                                <!-- Mobile nav -->                            </ul>                        </div>                    </div><!-- .row -->                </div>            </div>            <!-- Chat: Header -->            <!-- Chat: Search -->            <div class="collapse border-bottom px-lg-8" id="chat-2-search">                <div class="container-xxl py-4 py-lg-6">                    <div class="input-group">                        <input type="text" class="form-control form-control-lg" placeholder="Search this chat" aria-label="Search this chat">                        <div class="input-group-append">                            <button class="btn btn-lg btn-ico btn-secondary btn-minimal" type="submit">                                <i class="fe-search"></i>                            </button>                        </div>                    </div>                </div>            </div>            <!-- Chat: Search -->            <!-- Chat: Content-->            <div class="chat-content px-lg-8">                <div id = "messageContainer" class="container-xxl py-6 py-lg-10">                                  `
@@ -1045,7 +1033,7 @@ function addChat(user, targetUser, chat){
                 newDiv.innerHTML = '<a class="avatar avatar-sm mr-4 mr-lg-5" href="#" data-chat-sidebar-toggle="#chat-1-user-profile"><img class="avatar-img" src="messenger/assets/images/avatars/7.jpg" alt=""></a><div class="message-body"><div class="message-row"><div class="d-flex align-items-center"><div class="message-content bg-light">                                        <!--<h6 class="mb-2">William Wright</h6>-->                                        <div>'.concat(data.newChats[i].content, '</div>                                        <div class="mt-1">                                                                       </div>                                    </div>                                    <!-- Message: content -->                                    <!-- Message: dropdown -->                                    </div></div></div>');
             } else {
                 newDiv.classList.add("message-right");
-                newDiv.innerHTML = '<div class="avatar avatar-sm ml-4 ml-lg-5 d-none d-lg-block">                            <img class="avatar-img" src="messenger/assets/images/avatars/12.jpg" alt="">                        </div>                        <!-- Message: body -->                        <div class="message-body">                            <!-- Message: row -->                            <div class="message-row">                                <div class="d-flex align-items-center justify-content-end">                                    <!-- Message: dropdown -->                                    <div class="dropdown">                                        <a class="text-muted opacity-60 mr-3" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">                                            <i class="fe-more-vertical"></i>                                        </a>                                        <div class="dropdown-menu">                                            <a class="dropdown-item d-flex align-items-center" href="#">                                                Edit <span class="ml-auto fe-edit-3"></span>                                            </a>                                            <a class="dropdown-item d-flex align-items-center" href="#">                                                Share <span class="ml-auto fe-share-2"></span>                                            </a>                                            <a class="dropdown-item d-flex align-items-center" href="#">                                                Delete <span class="ml-auto fe-trash-2"></span>                                            </a>                                        </div>                                    </div>                                    <!-- Message: dropdown -->                                    <!-- Message: content -->                                    <div class="message-content bg-primary text-white">                                        <div>'.concat(data.newChats[i].content, '</div>                                        <div class="mt-1">                                            <small class="opacity-65">8 mins ago</small>                                        </div>                                    </div>                                    <!-- Message: content -->                                </div>                            </div>                            <!-- Message: row -->                        </div>                        <!-- Message: body -->                    ');
+                newDiv.innerHTML = '<div class="avatar avatar-sm ml-4 ml-lg-5 d-none d-lg-block">                            <img class="avatar-img" src="messenger/assets/images/avatars/12.jpg" alt="">                        </div>                        <!-- Message: body -->                        <div class="message-body">                            <!-- Message: row -->                            <div class="message-row">                                <div class="d-flex align-items-center justify-content-end">                                    <!-- Message: dropdown -->                                    <div class="dropdown">                                        <a class="text-muted opacity-60 mr-3" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">                                            <i class="fe-more-vertical"></i>                                        </a>                                        <div class="dropdown-menu">                                            <a class="dropdown-item d-flex align-items-center" href="#">                                                Edit <span class="ml-auto fe-edit-3"></span>                                            </a>                                            <a class="dropdown-item d-flex align-items-center" href="#">                                                Share <span class="ml-auto fe-share-2"></span>                                            </a>                                            <a class="dropdown-item d-flex align-items-center" href="#">                                                Delete <span class="ml-auto fe-trash-2"></span>                                            </a>                                        </div>                                    </div>                                    <!-- Message: dropdown -->                                    <!-- Message: content -->                                    <div class="message-content bg-primary text-white">                                        <div>'.concat(data.newChats[i].content, '</div>                                        <div class="mt-1">                                                                              </div>                                    </div>                                    <!-- Message: content -->                                </div>                            </div>                            <!-- Message: row -->                        </div>                        <!-- Message: body -->                    ');
             }
             if (i == data.newChats.length - 1) {
                 newDiv.id = "lastMessage"
@@ -1063,53 +1051,63 @@ function addChat(user, targetUser, chat){
 function renderChats(){
     //Do this onload
     console.log("getting chat list")
-    chatList = ''
+    document.getElementById('chatList').innerHTML = ''
     console.log(thisUser)
     for(i in thisUser.chats){
-        getTargetUser(thisUser.chats[i].with)
-
-
-        console.log(targetChatUser)
-
-        chatList = chatList + `<a class="text-reset nav-link p-0 mb-6" onclick="requestChat('`+targetChatUser.email+`')">    <div class="card card-active-listener">        <div class="card-body">            <div class="media">                                                <div class="avatar mr-5">                    <img class="avatar-img" src="`+ targetChatUser.profileImage +`" alt="Bootstrap Themes">                </div>                                <div class="media-body overflow-hidden">                    <div class="d-flex align-items-center mb-1">                        <h6 class="text-truncate mb-0 mr-auto">`+ targetChatUser.fullName +`</h6>                        <p class="small text-muted text-nowrap ml-4">10:42 am</p>                    </div>                    <div class="text-truncate">Hey, Maher! How are you? The weather is great isn't it?</div>                </div>            </div>        </div>                <div class="badge badge-circle badge-primary badge-border-light badge-top-right">            <span>3</span>        </div>            </div></a>`
-
-    }
-    document.getElementById('chatList').innerHTML = chatList
-
-}
-
-
-function getUserInfo(influencerEmail) {
-    fetch('http://192.168.0.128:8000/getInfluencerProfile', {
+        //getTargetUser(thisUser.chats[i].with)
+        fetch('http://192.168.4.25:8000/getInfluencerProfile', {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                email: 'leonardmelnik@gmail.com',
-                password: 'l',
+                email: thisUser.email,
                 accountType: 1,
-                targetEmail: 'leonardmelnik@gmail.com'
+                targetUsername: thisUser.chats[i].with
+            
             })
         })
         .then(response => response.json())
-        .then(data => renderSettings(data.influencerProfile));
+        .then(data => renderOneChat(data.influencerProfile));
 
+        
 
+        console.log("yayy",targetChatUser)
 
+        
+    }
+   
 
 }
+
+function renderOneChat(chatUser){
+    console.log(chatUser)
+    if(chatUser.accountType == 1){
+        document.getElementById('chatList').innerHTML = document.getElementById('chatList').innerHTML + `<a class="text-reset nav-link p-0 mb-6" onclick="requestChat('`+chatUser.username+`')">    <div class="card card-active-listener">        <div class="card-body">            <div class="media">                                                <div class="avatar mr-5">                    <img class="avatar-img" src="`+ chatUser.profileImage +`" alt="Bootstrap Themes">                </div>                                <div class="media-body overflow-hidden">                    <div class="d-flex align-items-center mb-1">                        <h6 class="text-truncate mb-0 mr-auto">`+ chatUser.businessName +`</h6>                        <p class="small text-muted text-nowrap ml-4">10:42 am</p>                    </div>                    <div class="text-truncate">Hey, Maher! How are you? The weather is great isn't it?</div>                </div>            </div>        </div>                <div class="badge badge-circle badge-primary badge-border-light badge-top-right">            <span>3</span>        </div>            </div></a>`
+
+    }
+    else{
+        document.getElementById('chatList').innerHTML = document.getElementById('chatList').innerHTML + `<a class="text-reset nav-link p-0 mb-6" onclick="requestChat('`+chatUser.username+`')">    <div class="card card-active-listener">        <div class="card-body">            <div class="media">                                                <div class="avatar mr-5">                    <img class="avatar-img" src="`+ chatUser.profileImage +`" alt="Bootstrap Themes">                </div>                                <div class="media-body overflow-hidden">                    <div class="d-flex align-items-center mb-1">                        <h6 class="text-truncate mb-0 mr-auto">`+ chatUser.fullName +`</h6>                        <p class="small text-muted text-nowrap ml-4">10:42 am</p>                    </div>                    <div class="text-truncate">Hey, Maher! How are you? The weather is great isn't it?</div>                </div>            </div>        </div>                <div class="badge badge-circle badge-primary badge-border-light badge-top-right">            <span>3</span>        </div>            </div></a>`
+
+    }
+ 
+    
+}
+
+
+
+renderSettings(thisUser)
 
 
 function getTargetUser(targetUsername){
     console.log("getting target user" + targetUsername)
-    fetch('http://192.168.0.128:8000/getInfluencerProfile', {
+    fetch('http://192.168.4.25:8000/getInfluencerProfile', {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                email: 'leonardmelnik@gmail.com',
+                email: thisUser.email,
                 password: 'l',
                 accountType: 1,
                 targetUsername: targetUsername
@@ -1124,18 +1122,18 @@ function getTargetUser(targetUsername){
 function setTargetUser(targetUser){
     
     targetChatUser = targetUser
-    
+    var hello = "zero motherfucker"
 }
-getUserInfo()
+
 
 function addProfileMain(influencerEmail) {
-    fetch('http://192.168.0.128:8000/getInfluencerProfile', {
+    fetch('http://192.168.4.25:8000/getInfluencerProfile', {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                email: 'leonardmelnik@gmail.com',
+                email: thisUser.email,
                 password: 'l',
                 accountType: 1,
                 targetEmail: influencerEmail
@@ -1146,17 +1144,17 @@ function addProfileMain(influencerEmail) {
 }
 
     
-    function requestChat(targetEmail) {
-        console.log("getting chat for" + targetEmail)
-        fetch('http://192.168.0.128:8000/getChat', {
+    function requestChat(targetUsername) {
+        console.log("getting chat for" + targetUsername)
+        fetch('http://192.168.4.25:8000/getChat', {
                 method: 'post',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    email: 'leonardmelnik@gmail.com',
+                    email: thisUser.email,
                     password: 'l',
-                    targetEmail: targetEmail
+                    targetUsername: targetUsername
                 })
             })
             .then(response => response.json())
@@ -1166,29 +1164,12 @@ function addProfileMain(influencerEmail) {
     }
  
  
-    console.log("Before render self")
-    function requestSelf() {
-    fetch('http://192.168.0.128:8000/getInfluencerProfile', {
-            method: 'post',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                email: 'leonardmelnik@gmail.com',
-                password: 'l',
-                accountType: 1,
-                targetEmail: 'leonardmelnik@gmail.com'
-            })
-        })
-        .then(response => response.json())
-        .then(data => renderSelf(data.influencerProfile));
+  
 
+renderSelf(thisUser)
 
-
-
-}
     function renderSelf(influencerData) {
-
+        console.log("renderself", influencerData)
         thisUser = influencerData
         renderChats()
 
@@ -1212,7 +1193,7 @@ function addProfileMain(influencerEmail) {
         console.log(parentNode)
         parentNode.innerHTML = firstPart + middlePart + lastPart;
     }
-    requestSelf()
+   
     
     function renderInfluencerProfile(influencerData) {
         console.log(influencerData)
@@ -1222,7 +1203,8 @@ function addProfileMain(influencerEmail) {
         bio = influencerData.bio
         email = influencerData.email
         profileUrl = influencerData.profileImage
-        var firstPart = '<div>    <div class="d-flex flex-column h-100">        <div class="hide-scrollbar">            <div class="container-fluid py-6">                <!-- Title -->                <div class="col-3 d-xl-none">                            <ul class="list-inline mb-0">                                <li class="list-inline-item">                                    <a class="text-muted px-0" onclick="goBack()" data-chat="open">                                        <i class="icon-md fe-chevron-left"></i>                                    </a>                                </li>                            </ul>                        </div>              <!-- Title -->                <!-- Card -->                <div class="card mb-6">                    <div class="card-body">                        <div class="text-center py-6">                            <!-- Photo -->                            <div class="avatar avatar-xl mb-5">                                <img class="avatar-img" src="' + profileUrl + '" alt="">                            </div>                            <h5>' + fullName + '</h5>                            <p class="text-muted">' + bio + '</p>                        </div>                    </div>                </div>                <!-- Card --> <div class="accordion modified-accordion mb-n6 mb-lg-8" id="profile-instagram-main">                <div class="card-columns">                    <!-- Card -->                    <div class="card mb-6 mb-lg-8">                        <div class="card-header position-relative">                            <a href="#" class="text-reset d-block stretched-link collapsed" data-toggle="collapse" data-target="#profile-featured-posts" aria-controls="profile-featured-posts" aria-expanded="true">                                <div class="row no-gutters align-items-center">                                    <!-- Title -->                                    <div class="col">                                        <h5>Featured Posts</h5>                                        <p>Update your profile details.</p>                                    </div>                                    <!-- Icon -->                                    <div class="col-auto">                                        <i class="text-muted icon-md fe-instagram"></i>                                    </div>                                </div>                            </a>                        </div>                        <div id="profile-featured-posts" class="collapse" data-parent="#profile-instagram-main">                            <div class="card-body">                                <div class="card mb-6">                                    <div class="card-body">                                '
+        targetUser = influencerData
+        var firstPart = '<div>    <div class="d-flex flex-column h-100">        <div class="hide-scrollbar">            <div class="container-fluid py-6">                <!-- Title -->                <div class="col-3 d-xl-none">                            <ul class="list-inline mb-0">                                <li class="list-inline-item">                                    <a class="text-muted px-0" onclick="goBack()" data-chat="open">                                        <i class="icon-md fe-chevron-left"></i>                                    </a>                                </li>                            </ul>                        </div>              <!-- Title -->                <!-- Card -->                <div class="card mb-6">                    <div class="card-body">                        <div class="text-center py-6">                            <!-- Photo -->                            <div class="avatar avatar-xl mb-5">                                <img class="avatar-img" src="' + profileUrl + '" alt="">                            </div>                            <h5>' + fullName + '</h5>                            <p class="text-muted">' + bio + '</p>       <button type="button" style="background-color: blue; color: white" class="btn btn-block btn-basic d-flex align-items-center" data-toggle="tab" onclick="startChat()">                            Message Me                            <span class="fe-email ml-auto"></span>                        </button>                 </div>                    </div>                </div>                <!-- Card --> <div class="accordion modified-accordion mb-n6 mb-lg-8" id="profile-instagram-main">                <div class="card-columns">                    <!-- Card -->                    <div class="card mb-6 mb-lg-8">                        <div class="card-header position-relative">                            <a href="#" class="text-reset d-block stretched-link collapsed" data-toggle="collapse" data-target="#profile-featured-posts" aria-controls="profile-featured-posts" aria-expanded="true">                                <div class="row no-gutters align-items-center">                                    <!-- Title -->                                    <div class="col">                                        <h5>Featured Posts</h5>                                        <p>Update your profile details.</p>                                    </div>                                    <!-- Icon -->                                    <div class="col-auto">                                        <i class="text-muted icon-md fe-instagram"></i>                                    </div>                                </div>                            </a>                        </div>                        <div id="profile-featured-posts" class="collapse" data-parent="#profile-instagram-main">                            <div class="card-body">                                <div class="card mb-6">                                    <div class="card-body">                                '
         var middlePart = ''
         var constValue = 0 
         console.log("UAIBWDKAJWBDAKWJBD")
@@ -1298,13 +1280,13 @@ function addProfileMain(influencerEmail) {
 
     }
     function getInfluencers() {
-        fetch('http://192.168.0.128:8000/getInfluencers', {
+        fetch('http://192.168.4.25:8000/getInfluencers', {
                 method: 'post',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    email: 'leonardmelnik@gmail.com',
+                    email: thisUser.email,
                     password: 'l',
                     accountType: 1
                 })
@@ -1346,6 +1328,23 @@ function addProfileMain(influencerEmail) {
 
     }
 
+    function startChat(){
+        fetch('http://192.168.4.25:8000/createChat', {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: thisUser.email,
+                user: thisUser,
+                targetEmail : targetUser.email
+
+            })
+        })
+        console.log("Startoing")
+        
+    }
+
     function updateProfile() {
 
 
@@ -1354,13 +1353,13 @@ function addProfileMain(influencerEmail) {
         htmlEmail = document.getElementById("profile-email")
         htmlAbout = document.getElementById("profile-about")
 
-        fetch('http://192.168.0.128:8000/updateProfile', {
+        fetch('http://192.168.4.25:8000/updateProfile', {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                email: 'leonardmelnik@gmail.com',
+                email: thisUser.email,
                 password: 'l',
                 name: htmlName.value,
                 phone: htmlPhone.value,

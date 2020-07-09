@@ -55,7 +55,7 @@
                             </div>
 
                             <!-- Submit -->
-                            <button onclick="window.location.href = 'index.html';" class="btn btn-lg btn-block btn-primary" type="submit">Sign in</button>
+                            <a onclick="verifyUser()" class="btn btn-lg btn-block btn-primary" type="submit">Sign in</a>
                         </form>
 
                         <!-- Text -->
@@ -77,7 +77,33 @@
         <script>
             function verifyUser(){
                 //Send post request to server, if account is real. Save the email and password in session storage
-                sessionStorage.setItem("email", "Smith");
+                
+                email = document.getElementById("email").value
+                password = document.getElementById("password").value
+                fetch('http://192.168.4.25:8000/getSelf', {
+                    method: 'post',
+                    headers: {
+                'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+             
+            })
+        })
+        .then(response => response.json())
+        .then(data => saveUser(data.profile));
+
+            }
+            function saveUser(profile){
+                console.log("gotprofile", profile)
+                sessionStorage.setItem("user", JSON.stringify(profile));
+                window.location.href = 'index.html';
+
+            }
+            function goToMain(){
+                console.log("GO to main")
+                
             }
 
         </script>
