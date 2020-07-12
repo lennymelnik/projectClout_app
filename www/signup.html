@@ -33,7 +33,7 @@
                         <p class="text-center mb-6">Welcome to the official Chat web-client.</p>
 
                         <!-- Form -->
-                        <form role="form" action="create" method="POST">
+                        <form role="form" method="POST">
                             <div class="form-group">
                               <label class="form-control-label">Account Type</label>
                             <select name="accountType" class="custom-select" id="accountType">
@@ -84,8 +84,8 @@
                               </div>
                             </div>
                             
-                            <div class="mt-4"><button type="submit" class="btn btn-sm btn-primary btn-icon rounded-pill">
-                                <span onclick="createUser()" class="btn-inner--text">Create my account</span>
+                            <div class="mt-4"><button type="button" class="btn btn-sm btn-primary btn-icon rounded-pill" onclick="createUser()" >
+                                <span class="btn-inner--text">Create my account</span>
                                 <span class="btn-inner--icon"><i class="fas fa-long-arrow-alt-right"></i></span>
                               </button></div>
                           </form>
@@ -108,12 +108,39 @@
         <script src="assets/js/template.js"></script>
         <!-- Scripts -->
         <script>
+          
             function createUser(){
-                document.getElementsByName("accountType")
-                document.getElementsByName("password")
-                document.getElementsByName("passwordConfirm")
-                document.getElementsByName("email")
-                document.getElementsByName("username")
+              console.log("Got here")
+                var accountType = document.getElementById("accountType").value
+                document.getElementById
+                var password = document.getElementById("input-password").value
+                var passwordConfirm = document.getElementById("input-password-confirm").value
+                var email = document.getElementById("input-email").value
+                var username = document.getElementById("input-username").value
+                console.log()
+                   fetch('http://192.168.4.25:8000/create', {
+                    method: 'post',
+                    headers: {
+                'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  
+                  email: email,
+                  password: password,
+                  accountType: accountType,
+                  username: username
+           
+                })
+        })
+                    .then(response => response.json())
+                    .then(data => finalize(data.status))
+                }
+              
+
+            function finalize(status){
+              if(status == "done"){
+                window.location.href = 'signin.html';
+              }
 
             }
         </script>
